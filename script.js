@@ -1,4 +1,4 @@
-const canvas = document.getElementById('pingpong');
+const canvas = document.getElementById('tennis');
 const ctx = canvas.getContext('2d');
 
 const user = {
@@ -6,25 +6,25 @@ const user = {
     y: canvas.height/2 - 50,
     width: 10,
     height: 100,
-    color: 'WHITE',
+    color: 'white',
     score: 0
 }
 
-const com = {
+const computer = {
     x: canvas.width - 10,
     y: canvas.height/2 - 50,
     width: 10,
     height: 100,
-    color: 'WHITE',
+    color: 'white',
     score: 0
 }
 
 const net = {
-    x: canvas.width/2 - 1,
+    x: canvas.width/2 - 1, 
     y: 0,
     width: 2,
-    height: 10,
-    color: 'WHITE',
+    height: 15,
+    color: 'white',
 }
 
 const ball = {
@@ -34,7 +34,7 @@ const ball = {
     speed: 5,
     velocityX: 5,
     velocityY: 5,
-    color: 'WHITE'
+    color: 'white'
 }
 
 const drawRect = (x, y, w, h, color) => {
@@ -67,13 +67,18 @@ const collision = (b, p) => {
     p.bottom = p.y + p.height;
     p.left = p.x;
     p.right = p.x + p.width;
-
     b.top = b.y - b.radius;
     b.bottom = b.y + b.radius;
     b.left = b.x - b.radius;
     b.right = b.x + b.radius;
-
     return b.right > p.left && b.top < p.bottom && b.left < p.right && b.bottom > p.top;
+}
+
+const resetBall = () => {
+    ball.x = canvas.width/2;
+    ball.y = canvas.height/2;
+    ball.speed = 5;
+    ball.velocityX = -ball.velocityX;
 }
 
 const update = () => {
@@ -82,21 +87,40 @@ const update = () => {
     if(ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
         ball.velocityY = -ball.velocityY;
     }
-    let player = (ball.x < canvas.width/2) ? user : com;
+    let player = (ball.x < canvas.width/2) ? user : computer;
     if(collision(ball, player)) {
         let collidePoint = (ball.y - (player.y + player.height/2));
         collidePoint = collidePoint / (player.height/2);
-        let angleRad = (Math.PI/4) * collidePoint;
+        let angle = (Math.PI/4) * collidePoint;
+        let ballDir = (ball.x < canvas.width/2) ? 1 : -1;
+        ball.velocityX = ball.speed * Math.cos(angle) * ballDir;
+        ball.velocityY = ball.speed * Math.sin(angle) * ballDir;
+        ball.speed += Math.floor(Math.random());
+        ball.speed -= Math.floor(Math.random());
+    }
+    if(ball.x - ball.radius < 0) {
+        computer.score++;
+        resetBall();
+    } else if(ball.x + ball.radius > canvas.width) {
+        user.score++;
+        resetBall();
     }
 }
 
+const moveBat = (e) => {
+    let box = canvas.getBoundingClientRect();
+    user.y = e.clientY - box.top - user.height/2;
+}
+
+canvas.addEventListener('mousemove', moveBat);
+
 const render = () => {
-    drawRect(0, 0, canvas.width, canvas.height, "BLACK");
-    drawText(user.score, canvas.width/4, canvas.width/5, "WHITE");
-    drawText(com.score, 3*canvas.width/4, canvas.width/5, "WHITE");
+    drawRect(0, 0, canvas.width, canvas.height, "black");
+    drawText(user.score, canvas.width/4, canvas.width/5, "white");
+    drawText(computer.score, 3*canvas.width/4, canvas.width/5, "white");
     drawNet();
     drawRect(user.x, user.y, user.width, user.height, user.color);
-    drawRect(com.x, com.y, com.width, com.height, com.color);
+    drawRect(computer.x, computer.y, computer.width, computer.height, computer.color);
     drawCircle(ball.x, ball.y, ball.radius, ball.color);
 }
 
