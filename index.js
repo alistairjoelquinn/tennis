@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const hb = require('express-handlebars');
-const setup = require('./setup');
+const { user, computer, net, line1, line2, horizontal, ball } = require('./setup');
 
 app.engine('handlebars', hb());
 app.set('view engine', 'handlebars');
@@ -16,7 +16,7 @@ app.use(express.static('./public'));
 app.get('/', (req, res) => {
 
     res.render('main-window', {
-        setup
+        user, computer, net, line1, line2, horizontal, ball
     });
 });
 
