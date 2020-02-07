@@ -2,6 +2,9 @@ const canvas = document.getElementById('tennis');
 let userScore = document.getElementById('user');
 let computerScore = document.getElementById('computer');
 const ctx = canvas.getContext('2d');
+console.log(setup);
+const { user, computer, net, line1, line2, horizontal, ball } = JSON.parse(setup);
+console.log("user", user);
 
 const drawRect = (x, y, w, h, color) => {
     ctx.fillStyle = color;
