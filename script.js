@@ -5,7 +5,7 @@ const ctx = canvas.getContext('2d');
 
 const user = {
     x: 0,
-    y: canvas.height/2 - 50,
+    y: 200,
     width: 10,
     height: 100,
     color: 'brown',
@@ -133,7 +133,7 @@ const resetBall = () => {
 const update = () => {
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
-    let skill = 0.2;
+    let skill = 0.4;
     computer.y = ball.y - ((computer.y + computer.height/2) * skill);
     if(ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
         ball.velocityY = -ball.velocityY;
@@ -168,6 +168,7 @@ const update = () => {
 const moveBat = (e) => {
     let box = canvas.getBoundingClientRect();
     user.y = e.clientY - box.top - user.height/2;
+    user.x = e.clientX - box.left; 
 }
 
 canvas.addEventListener('mousemove', moveBat);
