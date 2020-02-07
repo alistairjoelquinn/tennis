@@ -3,66 +3,6 @@ let userScore = document.getElementById('user');
 let computerScore = document.getElementById('computer');
 const ctx = canvas.getContext('2d');
 
-const user = {
-    x: 0,
-    y: 200,
-    width: 10,
-    height: 100,
-    color: 'brown',
-    score: 0
-}
-
-const computer = {
-    x: canvas.width - 10,
-    y: canvas.height/2 - 50,
-    width: 10,
-    height: 100,
-    color: 'brown',
-    score: 0
-}
-
-const net = {
-    x: canvas.width/2 - 2.5, 
-    y: 0,
-    width: 5,
-    height: 15,
-    color: 'darkslategrey',
-}
-
-const line1 = {
-    x: canvas.width/4 - 1, 
-    y: 0,
-    width: 2,
-    height: 15,
-    color: 'white',
-}
-
-const line2 = {
-    x: 3*(canvas.width/4) - 1, 
-    y: 0,
-    width: 2,
-    height: 15,
-    color: 'white',
-}
-
-const horizontal = {
-    x: (canvas.width/4) - 1,
-    y: canvas.height/2, 
-    width: 500,
-    height: 2,
-    color: 'white',
-}
-
-const ball = {
-    x: canvas.width/2,
-    y: canvas.height/2,
-    radius: 10,
-    speed: 10,
-    velocityX: 10,
-    velocityY: 10,
-    color: 'yellow'
-}
-
 const drawRect = (x, y, w, h, color) => {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
