@@ -2,11 +2,16 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: none;
+    background-color: tomato;
 }
 
 .score {
-    display: inline-block;
+    display: flex;
     width: 100%;
+    background-color: #fff;
+    width: 20vw;
+    height: 10vh;
 }
 
 p {
@@ -16,7 +21,13 @@ p {
 }
 
 canvas {
-    margin-top: 20px;
+    margin-top: 10vh;
     border: 2px solid black;
 }
 
+.conts {
+    display: inline-block;
+    width: 49%;
+    height: 100%;
+    border: 1px solid green;
+}

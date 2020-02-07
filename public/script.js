@@ -2,9 +2,9 @@ const canvas = document.getElementById('tennis');
 let userScore = document.getElementById('user');
 let computerScore = document.getElementById('computer');
 const ctx = canvas.getContext('2d');
-console.log(setup);
 const { user, computer, net, line1, line2, horizontal, ball } = JSON.parse(setup);
-console.log("user", user);
+let gameStarted = false;
+let computerDir = 1;
 
 const drawRect = (x, y, w, h, color) => {
     ctx.fillStyle = color;
@@ -48,7 +48,7 @@ const drawHorizontal = () => {
     drawRect(horizontal.x, horizontal.y, horizontal.width, horizontal.height, horizontal.color);
 }
 
-const collision = (b, p) => {
+const strike = (b, p) => {
     p.top = p.y;
     p.bottom = p.y + p.height;
     p.left = p.x;
@@ -60,15 +60,16 @@ const collision = (b, p) => {
     return b.right > p.left && b.top < p.bottom && b.left < p.right && b.bottom > p.top;
 }
 
-const resetBall = () => {
+const gameReset = () => {
+    computer.x = 790;
     ball.velocityX = 0;
     ball.velocityY = 0;
-    ball.x = canvas.width/2;
-    ball.y = canvas.height/2;
+    ball.x = 700;
+    ball.y = 100;
     ball.speed = 10;
     ball.velocityX = -ball.velocityX;
     setTimeout(() => {
-        ball.velocityX = 10;
+        ball.velocityX = -10;
         ball.velocityY = 10;
     }, 1000);
 }
@@ -78,11 +79,30 @@ const update = () => {
     ball.y += ball.velocityY;
     let skill = 0.4;
     computer.y = ball.y - ((computer.y + computer.height/2) * skill);
+    if(Math.random() < 0.15) {
+        computerDir = -computerDir;
+    }
+    if(Math.random() > 0.7) {
+        computer.x -= (1*computerDir);
+    }
+    if(Math.random() < 0.05) {
+        computer.x -= (2*computerDir);
+    }
+    if(Math.random() < 0.7 && Math.random() > 0.4) {
+        computer.x -= Math.random();
+    }
+    if(computer.x < 450) {
+        computer += 5;
+    }
+    if(computer.x > 792) {
+        computer.x -= 1;
+    }
+    
     if(ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
         ball.velocityY = -ball.velocityY;
     }
     let player = (ball.x < canvas.width/2) ? user : computer;
-    if(collision(ball, player)) {
+    if(strike(ball, player)) {
         let collidePoint = (ball.y - (player.y + player.height/2));
         collidePoint = collidePoint / (player.height/2);
         let angle = (Math.PI/4) * collidePoint;
@@ -100,11 +120,11 @@ const update = () => {
     if(ball.x - ball.radius < 0) {
         computer.score++;
         computerScore.innerText = computer.score;
-        resetBall();
+        gameReset();
     } else if(ball.x + ball.radius > canvas.width) {
         user.score++;
         userScore.innerText = user.score;
-        resetBall();
+        gameReset();
     }
 }
 
@@ -130,7 +150,18 @@ const render = () => {
 const game = () => {
     update();
     render();
-    requestAnimationFrame(game);
+    if(!gameStarted) {
+        setTimeout(() => {
+            ball.speed = 10;
+            ball.velocityX = -10;
+            ball.velocityY = 10;
+            gameStarted = true;
+            requestAnimationFrame(game);
+        }, 2000);
+    } else {
+        requestAnimationFrame(game);
+    }
 }
+
 
 game();
