@@ -2,16 +2,21 @@ const canvas = document.getElementById('tennis');
 let userScore = document.getElementById('user');
 let computerScore = document.getElementById('computer');
 const ctx = canvas.getContext('2d');
+// let player = document.getElementById('player');
 const { user, computer, net, line1, line2, horizontal, ball } = JSON.parse(setup);
 let gameStarted = false;
 let computerDir = 1;
 
-const drawRect = (x, y, w, h, color) => {
+const drawCourt = (x, y, w, h, color) => {
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
 }
 
-const drawCircle = (x, y, r, color) => {
+// const drawPlayer = () => {
+//     ctx.drawImage(player, 0, 250, 200, 100);
+// }
+
+const drawBall = (x, y, r, color) => {
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI*2, false);
@@ -20,7 +25,12 @@ const drawCircle = (x, y, r, color) => {
     ctx.fill();
 }
 
-const drawText = (text, x, y, color) => {
+const drawRect = (x, y, w, h, color) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+}
+
+const writeText = (text, x, y, color) => {
     ctx.fillStyle = color;
     ctx.font = '75px serif';
     ctx.fillText(text, x, y);
@@ -28,24 +38,24 @@ const drawText = (text, x, y, color) => {
 
 const drawNet = () => {
     for (let i = 0; i <= canvas.height; i+=15) {
-        drawRect(net.x, net.y + i, net.width, net.height, net.color);
+        drawCourt(net.x, net.y + i, net.width, net.height, net.color);
     }
 }
 
 const drawLine1 = () => {
     for (let i = 0; i <= canvas.height; i+=15) {
-        drawRect(line1.x, line1.y + i, line1.width, line1.height, line1.color);
+        drawCourt(line1.x, line1.y + i, line1.width, line1.height, line1.color);
     }
 }
 
 const drawLine2 = () => {
     for (let i = 0; i <= canvas.height; i+=15) {
-        drawRect(line2.x, line2.y + i, line2.width, line2.height, line2.color);
+        drawCourt(line2.x, line2.y + i, line2.width, line2.height, line2.color);
     }
 }
 
 const drawHorizontal = () => {
-    drawRect(horizontal.x, horizontal.y, horizontal.width, horizontal.height, horizontal.color);
+    drawCourt(horizontal.x, horizontal.y, horizontal.width, horizontal.height, horizontal.color);
 }
 
 const strike = (b, p) => {
@@ -131,26 +141,29 @@ const update = () => {
 const moveBat = (e) => {
     let box = canvas.getBoundingClientRect();
     user.y = e.clientY - box.top - user.height/2;
-    user.x = e.clientX - box.left; 
+    user.x = e.clientX - box.left;
 }
 
 canvas.addEventListener('mousemove', moveBat);
 
 const render = () => {
-    drawRect(0, 0, canvas.width, canvas.height, "#7cfc00");
+    drawCourt(0, 0, canvas.width, canvas.height, "#7cfc00");
     drawLine1();
     drawLine2();
     drawHorizontal();
     drawNet();
+    // drawPlayer();
     drawRect(user.x, user.y, user.width, user.height, user.color);
     drawRect(computer.x, computer.y, computer.width, computer.height, computer.color);
-    drawCircle(ball.x, ball.y, ball.radius, ball.color);
+    drawBall(ball.x, ball.y, ball.radius, ball.color);
 }
 
 const game = () => {
+    console.log('game is running');
     update();
     render();
     if(!gameStarted) {
+        console.log('if block is opening');
         setTimeout(() => {
             ball.speed = 10;
             ball.velocityX = -10;
@@ -163,5 +176,10 @@ const game = () => {
     }
 }
 
+window.addEventListener('mousemove', (e) => {
+    let bat1 = document.getElementById("bat-1");
+    bat1.style.top = e.clientY - bat1.offsetHeight / 2 + "px";
+    bat1.style.left = e.clientX - bat1.offsetWidth / 2 + "px"; 
+});
 
 game();

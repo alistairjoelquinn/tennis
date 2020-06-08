@@ -9,9 +9,9 @@ body {
 .score {
     display: flex;
     width: 100%;
-    background-color: #fff;
     width: 20vw;
     height: 10vh;
+    color: yellow;
 }
 
 p {
@@ -27,7 +27,34 @@ canvas {
 
 .conts {
     display: inline-block;
-    width: 49%;
+    width: 50%;
     height: 100%;
-    border: 1px solid green;
+    border: 1px solid dimgray;
+    background-color: black;
 }
+
+.score-title, #user, #computer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.score-title {
+    text-decoration: underline;
+}
+
+#bat-1 {
+    position: absolute;
+    font-size: 100px;
+}
+
+/* #bat-2 {
+    position: absolute;
+    font-size: 100px;
+    z-index: 5;
+}
+
+.hidden {
+    visibility: hidden;
+} */
